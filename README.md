@@ -11,3 +11,7 @@ How to use this:
     ```sh
     git clone https://github.com/namduy1012/Edited-Substrate-Node-With-Local-Packages.git
     ```
+3) Change folder to "Blockchain-Node" folder
+    ```sh
+    cd Blockchain-Node
+    ```
