@@ -6,4 +6,8 @@ Pakages folder is Edited of "substrate-polkadot-v0.9.32" (https://github.com/par
 
 How to use this:
 
-1) Rustc version - rustc 1.65.0, Nightly version - nightly-2021-02-20 (Refference: https://docs.substrate.io/install/troubleshoot-rust-issues/, the part of "Use a specific nightly toolchain")
+1) Rust version - rustc 1.65.0, Nightly version - nightly-2021-02-20 (Refference: https://docs.substrate.io/install/troubleshoot-rust-issues/, the part of "Use a specific nightly toolchain")
+2) Clone this repo
+    ```sh
+    git clone https://github.com/namduy1012/Edited-Substrate-Node-With-Local-Packages.git
+    ```
