@@ -1,0 +1,76 @@
+[package]
+name = "node-template"
+version = "4.0.0-dev"
+description = "A fresh FRAME-based Substrate node, ready for hacking."
+authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
+homepage = "https://substrate.io/"
+edition = "2021"
+license = "Unlicense"
+publish = false
+repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+build = "build.rs"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[[bin]]
+name = "node-template"
+
+[dependencies]
+clap = { version = "4.0.9", features = ["derive"] }
+
+sc-cli = { path = "../../Packages/client/cli"}
+sp-core = { path = "../../Packages/primitives/core"}
+sc-executor = { path = "../../Packages/client/executor"}
+sc-service = { path = "../../Packages/client/service"}
+sc-telemetry = { path = "../../Packages/client/telemetry"}
+sc-keystore = { path = "../../Packages/client/keystore"}
+sc-transaction-pool = { path = "../../Packages/client/transaction-pool"}
+sc-transaction-pool-api = { path = "../../Packages/client/transaction-pool/api"}
+sc-consensus-aura = { path = "../../Packages/client/consensus/aura"}
+sp-consensus-aura = { path = "../../Packages/primitives/consensus/aura"}
+sp-consensus = { path = "../../Packages/primitives/consensus/common"}
+sc-consensus = { path = "../../Packages/client/consensus/common"}
+sc-finality-grandpa = { path = "../../Packages/client/finality-grandpa"}
+sp-finality-grandpa = { path = "../../Packages/primitives/finality-grandpa"}
+sc-client-api = { path = "../../Packages/client/api"}
+sp-runtime = { path = "../../Packages/primitives/runtime"}
+sp-timestamp = { path = "../../Packages/primitives/timestamp"}
+sp-inherents = { path = "../../Packages/primitives/inherents"}
+sp-keyring = { path = "../../Packages/primitives/keyring"}
+frame-system = {path = "../../Packages/frame/system" }
+pallet-transaction-payment = { path = "../../Packages/frame/transaction-payment", default-features = false }
+
+# These dependencies are used for the node template's RPCs
+jsonrpsee = { version = "0.15.1", features = ["server"] }
+sc-rpc = { path = "../../Packages/client/rpc"}
+sp-api = { path = "../../Packages/primitives/api"}
+sc-rpc-api = { path = "../../Packages/client/rpc-api"}
+sp-blockchain = { path = "../../Packages/primitives/blockchain"}
+sp-block-builder = { path = "../../Packages/primitives/block-builder" }
+sc-basic-authorship = { path = "../../Packages/client/basic-authorship"}
+substrate-frame-rpc-system = { path = "../../Packages/utils/frame/rpc/system"}
+pallet-transaction-payment-rpc = {path = "../../Packages/frame/transaction-payment/rpc" }
+
+# These dependencies are used for runtime benchmarking
+frame-benchmarking = { path = "../../Packages/frame/benchmarking" }
+frame-benchmarking-cli = { path = "../../Packages/utils/frame/benchmarking-cli"}
+
+# Local Dependencies
+node-template-runtime = { version = "4.0.0-dev", path = "../runtime" }
+
+# CLI-specific dependencies
+try-runtime-cli = { path = "../../Packages/utils/frame/try-runtime/cli",optional = true}
+[build-dependencies]
+substrate-build-script-utils = { path = "../../Packages/utils/build-script-utils"}
+[features]
+default = []
+# Dependencies that are only required if runtime benchmarking should be build.
+runtime-benchmarks = [
+	"node-template-runtime/runtime-benchmarks",
+	"frame-benchmarking/runtime-benchmarks",
+	"frame-benchmarking-cli/runtime-benchmarks",
+]
+# Enable features that allow the runtime to be tried and debugged. Name might be subject to change
+# in the near future.
+try-runtime = ["node-template-runtime/try-runtime", "try-runtime-cli"]
