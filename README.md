@@ -15,3 +15,7 @@ How to use this:
     ```sh
     cd Blockchain-Node
     ```
+4) Build
+    ```sh
+    cargo build --release
+    ```
