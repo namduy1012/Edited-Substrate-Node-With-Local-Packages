@@ -6,7 +6,8 @@ pub use pallet::*;
 pub mod pallet {
 	use frame_support::{pallet_prelude::*,
 		traits::{Currency,Randomness,ExistenceRequirement},
-		sp_runtime::traits::Hash};
+		sp_runtime::traits::Hash,
+		transactional};
 	use frame_system::pallet_prelude::*;
 	 #[cfg(feature = "std")]
     use serde::{Deserialize, Serialize};
@@ -118,6 +119,7 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
+
 		#[pallet::weight(100)]
 		pub fn create_kitty(origin: OriginFor<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?; // <- add this line
@@ -129,6 +131,7 @@ pub mod pallet {
 			Self::deposit_event(Event::Created(sender, kitty_id));
 			Ok(())
 		}
+
 		#[pallet::weight(100)]
 		pub fn transfer(
 			origin: OriginFor<T>,
@@ -155,6 +158,7 @@ pub mod pallet {
 
 			Ok(())
 		}
+
 		#[pallet::weight(100)]
 		pub fn buy_kitty(
 			origin: OriginFor<T>,
@@ -193,6 +197,7 @@ pub mod pallet {
 
 			Ok(())
 		}
+
 		#[pallet::weight(100)]
 		pub fn breed_kitty(
 			origin: OriginFor<T>,
