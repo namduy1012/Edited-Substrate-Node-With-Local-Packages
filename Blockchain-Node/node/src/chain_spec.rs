@@ -1,5 +1,5 @@
 use node_template_runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,KittiesConfig,
 	SystemConfig, WASM_BINARY,
 };
 use sc_service::ChainType;
@@ -133,6 +133,9 @@ fn testnet_genesis(
 	_enable_println: bool,
 ) -> GenesisConfig {
 	GenesisConfig {
+		kitties: KittiesConfig {
+            mykitties: vec![],
+        },
 		system: SystemConfig {
 			// Add Wasm runtime to storage.
 			code: wasm_binary.to_vec(),

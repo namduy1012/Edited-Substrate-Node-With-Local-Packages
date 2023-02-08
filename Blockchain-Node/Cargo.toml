@@ -3,6 +3,7 @@ members = [
     "node",
     "pallets/template",
     "pallets/collectibles",
+    "pallets/kitties",
     "runtime",
 ]
 [profile.release]

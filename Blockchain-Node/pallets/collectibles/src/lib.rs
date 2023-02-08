@@ -262,24 +262,23 @@ pub mod pallet {
 			to: T::AccountId,
 			bid_price: BalanceOf<T>,
 		) -> DispatchResult {
-
-		// Get the collectible from the storage map
-		let mut collectible = CollectibleMap::<T>::get(&unique_id).ok_or(Error::<T>::NoCollectible)?;
-		let from = collectible.owner;
-		ensure!(from != to, Error::<T>::TransferToSelf);
-		let mut from_owned = OwnerOfCollectibles::<T>::get(&from);
-			
-		// Remove collectible from owned collectibles.
-		if let Some(ind) = from_owned.iter().position(|&id| id == unique_id) {
-				from_owned.swap_remove(ind);
-			} else {
-				return Err(Error::<T>::NoCollectible.into())
-			}
-		// Add collectible to owned collectible.
-		let mut to_owned = OwnerOfCollectibles::<T>::get(&to);
-		to_owned.try_push(unique_id).map_err(|_| Error::<T>::MaximumCollectiblesOwned)?;
-		// Mutating state with a balance transfer, so nothing is allowed to fail after this.
-		if let Some(price) = collectible.price {
+			// Get the collectible from the storage map
+			let mut collectible = CollectibleMap::<T>::get(&unique_id).ok_or(Error::<T>::NoCollectible)?;
+			let from = collectible.owner;
+			ensure!(from != to, Error::<T>::TransferToSelf);
+			let mut from_owned = OwnerOfCollectibles::<T>::get(&from);
+				
+			// Remove collectible from owned collectibles.
+			if let Some(ind) = from_owned.iter().position(|&id| id == unique_id) {
+					from_owned.swap_remove(ind);
+				} else {
+					return Err(Error::<T>::NoCollectible.into())
+				}
+			// Add collectible to owned collectible.
+			let mut to_owned = OwnerOfCollectibles::<T>::get(&to);
+			to_owned.try_push(unique_id).map_err(|_| Error::<T>::MaximumCollectiblesOwned)?;
+			// Mutating state with a balance transfer, so nothing is allowed to fail after this.
+			if let Some(price) = collectible.price {
 			ensure!(bid_price >= price, Error::<T>::BidPriceTooLow);
 			// Transfer the amount from buyer to seller
 			T::Currency::transfer(&to, &from, price, frame_support::traits::ExistenceRequirement::KeepAlive)?;
@@ -291,19 +290,19 @@ pub mod pallet {
 				collectible: unique_id,
 				price,
 			});
-		} else {
-			return Err(Error::<T>::NotForSale.into())
-		}
+			} else {
+				return Err(Error::<T>::NotForSale.into())
+			}
 
-		// Transfer succeeded, update the collectible owner and reset the price to `None`.
-		collectible.owner = to.clone();
-		collectible.price = None;
-		// Write updates to storage
-		CollectibleMap::<T>::insert(&unique_id, collectible);
-		OwnerOfCollectibles::<T>::insert(&to, to_owned);
-		OwnerOfCollectibles::<T>::insert(&from, from_owned);
-		Self::deposit_event(Event::TransferSucceeded { from, to, collectible: unique_id });
-		Ok(())
+			// Transfer succeeded, update the collectible owner and reset the price to `None`.
+			collectible.owner = to.clone();
+			collectible.price = None;
+			// Write updates to storage
+			CollectibleMap::<T>::insert(&unique_id, collectible);
+			OwnerOfCollectibles::<T>::insert(&to, to_owned);
+			OwnerOfCollectibles::<T>::insert(&from, from_owned);
+			Self::deposit_event(Event::TransferSucceeded { from, to, collectible: unique_id });
+			Ok(())
 		}
 	}
 }

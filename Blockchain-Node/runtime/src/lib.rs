@@ -49,7 +49,8 @@ pub use sp_runtime::{Perbill, Permill};
 pub use pallet_template;
 
 /// Import the collectibles pallet.
-pub use collectibles;
+// pub use collectibles;
+pub use kitties;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -286,6 +287,12 @@ impl collectibles::Config for Runtime {
     type CollectionRandomness = RandomnessCollectiveFlip;
     type MaximumOwned = frame_support::pallet_prelude::ConstU32<100>;
 }
+impl kitties::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+    type Currency = Balances;
+    type KittyRandomness = RandomnessCollectiveFlip;
+    type MaxKittyOwned = frame_support::pallet_prelude::ConstU32<100>;
+}
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
@@ -306,6 +313,7 @@ construct_runtime!(
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template,
 		Collectibles: collectibles,
+		Kitties: kitties,
 	}
 );
 
