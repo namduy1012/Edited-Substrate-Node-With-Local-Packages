@@ -51,6 +51,7 @@ frame-system-benchmarking = { default-features = false, path = "../../Packages/f
 pallet-template = { version = "4.0.0-dev", default-features = false, path = "../pallets/template" }
 collectibles = { default-features = false, path = "../pallets/collectibles" }
 kitties = { default-features = false, path = "../pallets/kitties" }
+ea4healthcare = { default-features = false, path = "../pallets/ea4healthcare" }
 
 [build-dependencies]
 substrate-wasm-builder = { default-features = false, path = "../../Packages/utils/wasm-builder" }
@@ -76,6 +77,7 @@ std = [
 	"pallet-template/std",
 	"collectibles/std",
 	"kitties/std",
+	"ea4healthcare/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",

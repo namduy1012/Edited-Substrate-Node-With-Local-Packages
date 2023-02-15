@@ -49,8 +49,9 @@ pub use sp_runtime::{Perbill, Permill};
 pub use pallet_template;
 
 /// Import the collectibles pallet.
-// pub use collectibles;
+pub use collectibles;
 pub use kitties;
+pub use ea4healthcare;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -293,6 +294,10 @@ impl kitties::Config for Runtime {
     type KittyRandomness = RandomnessCollectiveFlip;
     type MaxKittyOwned = frame_support::pallet_prelude::ConstU32<100>;
 }
+impl ea4healthcare::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+    type HealthRandomness = RandomnessCollectiveFlip;
+}
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
@@ -314,6 +319,7 @@ construct_runtime!(
 		TemplateModule: pallet_template,
 		Collectibles: collectibles,
 		Kitties: kitties,
+		EA4Healthcare: ea4healthcare,
 	}
 );
 

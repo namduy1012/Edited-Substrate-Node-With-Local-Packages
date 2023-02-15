@@ -4,6 +4,7 @@ members = [
     "pallets/template",
     "pallets/collectibles",
     "pallets/kitties",
+    "pallets/ea4healthcare",
     "runtime",
 ]
 [profile.release]
