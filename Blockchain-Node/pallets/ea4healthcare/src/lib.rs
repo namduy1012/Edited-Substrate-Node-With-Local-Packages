@@ -95,12 +95,12 @@ pub mod pallet {
 	#[scale_info(skip_type_params(T))]
 	pub struct AccountInfo<T: Config> {
 		pub owner: T::AccountId,
+		pub employeeid: [SmallNumberType; 7],
 		pub hashid : T::Hash,
 	}
 
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	pub struct IndividualInfo {
-		pub employeeid: [SmallNumberType; 7],
 		pub age : SmallNumberType,
 		pub gender: Gender,
 		pub education: RateScale,
@@ -165,10 +165,9 @@ pub mod pallet {
 
 	#[pallet::storage]
 	#[pallet::getter(fn account_info_storage)]
-	pub(super) type AccountInfoStorage<T: Config> = StorageDoubleMap<
+	pub(super) type AccountInfoStorage<T: Config> = StorageMap<
 		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, T::AccountId,
 		AccountInfo<T>,
 	>;
 
@@ -177,7 +176,7 @@ pub mod pallet {
 	pub(super) type IndividualInfoStorage<T: Config> = StorageDoubleMap<
 		_, 
 		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, AccountInfo<T>, 
 		IndividualInfo,
 	>;
 
@@ -186,7 +185,7 @@ pub mod pallet {
 	pub(super) type WorkingInfoStorage<T: Config> = StorageDoubleMap<
 		_, 
 		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, AccountInfo<T>, 
 		WorkingInfo,
 	>;
 
@@ -195,7 +194,7 @@ pub mod pallet {
 	pub(super) type WorkingYearStorage<T: Config> = StorageDoubleMap<
 		_, 
 		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, AccountInfo<T>, 
 		WorkingYearInfo,
 	>;
 
@@ -204,7 +203,7 @@ pub mod pallet {
 	pub(super) type RatingInfoStorage<T: Config> = StorageDoubleMap<
 		_, 
 		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, AccountInfo<T>, 
 		RatingInfo,
 	>;
 
@@ -213,21 +212,22 @@ pub mod pallet {
 	pub(super) type PatientInfoStorage<T: Config> = StorageDoubleMap<
 		_, 
 		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, T::Hash, 
+		Blake2_128Concat, AccountInfo<T>, 
 		PatientInfo<T>,
 	>;
 
 
 	#[pallet::error]
 	pub enum Error<T> {
-		EmployIDnotCorrect,
+		IISError,
+		MuError,
 	}
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		AddAccountInfo(T::AccountId, T::Hash, T::BlockNumber),
-		AddIndividualInfo(T::AccountId, T::Hash),
+		AddIndividualInfo(T::AccountId, T::Hash, T::BlockNumber),
 	}
 
 	#[pallet::call]
@@ -237,28 +237,40 @@ pub mod pallet {
 			let sender = ensure_signed(origin)?;
 			let hash = Self::generate_employeeid_hash(item);
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
-
 			let account_info = AccountInfo::<T>{
 																owner: sender.clone(),
-																hashid: hash.clone()
+																employeeid: item,
+																hashid: hash.clone(),
 															};
-			<AccountInfoStorage<T>>::insert(sender.clone(), hash.clone(), account_info);
+			<AccountInfoStorage<T>>::insert(sender.clone(), account_info);
 			Self::deposit_event(Event::AddAccountInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 
 		#[pallet::weight(0)]
-		pub fn add_individual_info(origin: OriginFor<T>, item: [SmallNumberType; 7]) -> DispatchResult {
+		pub fn add_individual_info(origin: OriginFor<T>, item: IndividualInfo) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			let hash = Self::generate_employeeid_hash(item);
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
+			let individual_info = IndividualInfo{
+				age : item.age,
+				gender: item.gender,
+				education: item.education,
+				education_field: item.education_field,
+				over18: item.over18,
+				department: item.department,
+				marital_status: item.marital_status,
+				distance_from_home: item.distance_from_home,
+				no_companies_worked: item.distance_from_home,
+				monthly_income: item.monthly_income,
+				percent_salary_hike: item.percent_salary_hike,
 
-			let account_info = AccountInfo::<T>{
-																owner: sender.clone(),
-																hashid: hash.clone()
-															};
-			<AccountInfoStorage<T>>::insert(sender.clone(), hash.clone(), account_info);
-			Self::deposit_event(Event::AddAccountInfo(sender, hash, blocknumber));
+			};
+			let hash = Self::generate_employeeid_hash(&individual_info);
+			let account_info = Self::account_info_storage(&sender);
+			<IndividualInfoStorage<T>>::insert(sender.clone(),
+											 	account_info.unwrap(),
+											  	individual_info);
+			Self::deposit_event(Event::AddIndividualInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 	}
@@ -271,7 +283,7 @@ pub mod pallet {
 			let tmp = (
 				T::HealthRandomness::random(&b"Generate_EmployeeID_Hash"[..]).0,
 				item,
-				// <frame_system::Pallet<T>>::block_number(),
+				<frame_system::Pallet<T>>::block_number(),
 			);
 			let hash = T::Hashing::hash_of(&tmp.encode());
 			hash
