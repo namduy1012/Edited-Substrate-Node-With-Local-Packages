@@ -267,9 +267,11 @@ pub mod pallet {
 			};
 			let hash = Self::generate_hash(&individual_info);
 			let account_info = Self::account_info_storage(&sender);
-			<IndividualInfoStorage<T>>::insert(sender.clone(),
-											 	account_info.unwrap(),
-											  	individual_info);
+			<IndividualInfoStorage<T>>::insert(
+				sender.clone(),
+				account_info.unwrap(),
+				individual_info
+			);
 			Self::deposit_event(Event::AddIndividualInfo(sender, hash, blocknumber));
 			Ok(())
 		}
@@ -293,13 +295,37 @@ pub mod pallet {
 			};
 			let hash = Self::generate_hash(&working_info);
 			let account_info = Self::account_info_storage(&sender);
-			<WorkingInfoStorage<T>>::insert(sender.clone(),
-											 	account_info.unwrap(),
-											  	working_info);
+			<WorkingInfoStorage<T>>::insert(
+				sender.clone(),
+				account_info.unwrap(),
+				working_info
+			);
 			Self::deposit_event(Event::WorkingInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 
+		#[pallet::weight(0)]
+		pub fn add_working_year_info(origin: OriginFor<T>, item: WorkingYearInfo) -> DispatchResult {
+			let sender = ensure_signed(origin)?;
+			let blocknumber = <frame_system::Pallet<T>>::block_number();
+			let working_year_info = WorkingYearInfo {
+				total_working_years: item.total_working_years,
+				year_atcompany: item.year_atcompany,
+				year_incurrent_role: item.year_incurrent_role,
+				year_inlast_promotion: item.year_inlast_promotion,
+				year_withcurrent_manager: item.year_withcurrent_manager,
+				
+			};
+			let hash = Self::generate_hash(&working_year_info);
+			let account_info = Self::account_info_storage(&sender);
+			<WorkingYearStorage<T>>::insert(
+				sender.clone(),
+				account_info.unwrap(),
+				working_year_info
+			);
+			Self::deposit_event(Event::WorkingInfo(sender, hash, blocknumber));
+			Ok(())
+		}
 	}
 
 	impl<T: Config> Pallet<T> {
