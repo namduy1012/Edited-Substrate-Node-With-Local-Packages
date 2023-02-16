@@ -230,6 +230,7 @@ pub mod pallet {
 		WorkingInfo(T::AccountId, T::Hash, T::BlockNumber),
 		WorkingYearInfo(T::AccountId, T::Hash, T::BlockNumber),
 		RatingInfo(T::AccountId, T::Hash, T::BlockNumber),
+		PatientInfo(T::AccountId, T::Hash, T::BlockNumber),
 	}
 
 	#[pallet::call]
@@ -353,6 +354,25 @@ pub mod pallet {
 			Self::deposit_event(Event::RatingInfo(sender, hash, blocknumber));
 			Ok(())
 		}
+
+		#[pallet::weight(0)]
+		pub fn add_patient_info(origin: OriginFor<T>) -> DispatchResult {
+			let sender = ensure_signed(origin)?;
+			let blocknumber = <frame_system::Pallet<T>>::block_number();
+			let account_info = Self::account_info_storage(&sender).unwrap();
+			let patient_info = PatientInfo::<T> {
+				account: account_info.clone(),
+				individual_info: Self::individual_info_storage(&sender, &account_info).unwrap(),
+				working_info: Self::working_info_storage(&sender, &account_info).unwrap(),
+				working_year_info: Self::working_year_info_storage(&sender, &account_info).unwrap(),
+				rating: Self::rating_info_storage(&sender, &account_info).unwrap(),
+			};
+			let hash = Self::generate_hash(&patient_info);
+			<PatientInfoStorage<T>>::insert(sender.clone(), account_info, patient_info);
+			Self::deposit_event(Event::PatientInfo(sender, hash, blocknumber));
+			Ok(())
+		}
+
 	}
 
 	impl<T: Config> Pallet<T> {
