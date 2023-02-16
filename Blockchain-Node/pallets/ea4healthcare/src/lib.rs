@@ -228,6 +228,8 @@ pub mod pallet {
 		AddAccountInfo(T::AccountId, T::Hash, T::BlockNumber),
 		AddIndividualInfo(T::AccountId, T::Hash, T::BlockNumber),
 		WorkingInfo(T::AccountId, T::Hash, T::BlockNumber),
+		WorkingYearInfo(T::AccountId, T::Hash, T::BlockNumber),
+		RatingInfo(T::AccountId, T::Hash, T::BlockNumber),
 	}
 
 	#[pallet::call]
@@ -323,7 +325,32 @@ pub mod pallet {
 				account_info.unwrap(),
 				working_year_info
 			);
-			Self::deposit_event(Event::WorkingInfo(sender, hash, blocknumber));
+			Self::deposit_event(Event::WorkingYearInfo(sender, hash, blocknumber));
+			Ok(())
+		}
+
+		#[pallet::weight(0)]
+		pub fn add_rating_info(origin: OriginFor<T>, item: RatingInfo) -> DispatchResult {
+			let sender = ensure_signed(origin)?;
+			let blocknumber = <frame_system::Pallet<T>>::block_number();
+			let rating_info = RatingInfo {
+				attrition: item.attrition,
+				environment_satisfaction:item.environment_satisfaction,
+				job_satisfaction: item.job_satisfaction,
+				performance_rating: item.performance_rating,
+				relationship_satisfaction: item.relationship_satisfaction,
+				shift: item.shift,
+				work_life_balance: item.work_life_balance,
+				
+			};
+			let hash = Self::generate_hash(&rating_info);
+			let account_info = Self::account_info_storage(&sender);
+			<RatingInfoStorage<T>>::insert(
+				sender.clone(),
+				account_info.unwrap(),
+				rating_info,
+			);
+			Self::deposit_event(Event::RatingInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 	}
