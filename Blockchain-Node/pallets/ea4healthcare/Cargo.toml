@@ -10,7 +10,7 @@ frame-system = { default-features = false, path = "../../../Packages/frame/syste
 frame-support = { default-features = false, path = "../../../Packages/frame/support" }
 codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive",] }
 scale-info = { version = "2.1.1", default-features = false, features = ["derive"] }
-serde = { default-features = false }
+serde = { version = "1.0.152",  default-features = false }
 
 [features]
 default = ["std"]

@@ -7,7 +7,7 @@ pub mod pallet {
 
     use frame_support::{pallet_prelude::*,
 		traits::{Randomness},
-		sp_runtime::traits::{Hash, AccountIdConversion},
+		sp_runtime::traits::Hash,
 		inherent::Vec};
 	use frame_system::pallet_prelude::*;
 	 #[cfg(feature = "std")]
@@ -219,8 +219,7 @@ pub mod pallet {
 
 	#[pallet::error]
 	pub enum Error<T> {
-		IISError,
-		MuError,
+		
 	}
 
 	#[pallet::event]
@@ -228,6 +227,7 @@ pub mod pallet {
 	pub enum Event<T: Config> {
 		AddAccountInfo(T::AccountId, T::Hash, T::BlockNumber),
 		AddIndividualInfo(T::AccountId, T::Hash, T::BlockNumber),
+		WorkingInfo(T::AccountId, T::Hash, T::BlockNumber),
 	}
 
 	#[pallet::call]
@@ -235,13 +235,13 @@ pub mod pallet {
 		#[pallet::weight(0)]
 		pub fn add_account_info(origin: OriginFor<T>, item: [SmallNumberType; 7]) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			let hash = Self::generate_employeeid_hash(item);
+			let hash = Self::generate_hash(item);
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let account_info = AccountInfo::<T>{
-																owner: sender.clone(),
-																employeeid: item,
-																hashid: hash.clone(),
-															};
+				owner: sender.clone(),
+				employeeid: item,
+				hashid: hash.clone(),
+			};
 			<AccountInfoStorage<T>>::insert(sender.clone(), account_info);
 			Self::deposit_event(Event::AddAccountInfo(sender, hash, blocknumber));
 			Ok(())
@@ -265,7 +265,7 @@ pub mod pallet {
 				percent_salary_hike: item.percent_salary_hike,
 
 			};
-			let hash = Self::generate_employeeid_hash(&individual_info);
+			let hash = Self::generate_hash(&individual_info);
 			let account_info = Self::account_info_storage(&sender);
 			<IndividualInfoStorage<T>>::insert(sender.clone(),
 											 	account_info.unwrap(),
@@ -273,15 +273,42 @@ pub mod pallet {
 			Self::deposit_event(Event::AddIndividualInfo(sender, hash, blocknumber));
 			Ok(())
 		}
+
+		#[pallet::weight(0)]
+		pub fn add_working_info(origin: OriginFor<T>, item: WorkingInfo) -> DispatchResult {
+			let sender = ensure_signed(origin)?;
+			let blocknumber = <frame_system::Pallet<T>>::block_number();
+			let working_info = WorkingInfo {
+				job_involvement: item.job_involvement,
+				job_level: item.job_level,
+				job_role: item.job_role,
+				hourly_rate: item.hourly_rate,
+				daily_rate: item.daily_rate,
+				monthly_rate: item.monthly_rate,
+				standard_hours: item.standard_hours,
+				overtime: item.overtime,
+				bussiness_travel: item.bussiness_travel,
+				training_times_lastyear: item.training_times_lastyear,
+				
+			};
+			let hash = Self::generate_hash(&working_info);
+			let account_info = Self::account_info_storage(&sender);
+			<WorkingInfoStorage<T>>::insert(sender.clone(),
+											 	account_info.unwrap(),
+											  	working_info);
+			Self::deposit_event(Event::WorkingInfo(sender, hash, blocknumber));
+			Ok(())
+		}
+
 	}
 
 	impl<T: Config> Pallet<T> {
-		fn generate_employeeid_hash<V> (item: V) -> T::Hash 
+		fn generate_hash<V> (item: V) -> T::Hash 
 		where
         V: Encode, 
 		{
 			let tmp = (
-				T::HealthRandomness::random(&b"Generate_EmployeeID_Hash"[..]).0,
+				T::HealthRandomness::random(&b"2023/02/16_PhD_Nguyen_Quoc_Duy_Nam"[..]).0,
 				item,
 				<frame_system::Pallet<T>>::block_number(),
 			);

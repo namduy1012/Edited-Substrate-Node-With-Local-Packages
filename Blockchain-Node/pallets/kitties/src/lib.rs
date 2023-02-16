@@ -6,8 +6,7 @@ pub use pallet::*;
 pub mod pallet {
 	use frame_support::{pallet_prelude::*,
 		traits::{Currency,Randomness,ExistenceRequirement},
-		sp_runtime::traits::Hash,
-		transactional};
+		sp_runtime::traits::Hash};
 	use frame_system::pallet_prelude::*;
 	 #[cfg(feature = "std")]
     use serde::{Deserialize, Serialize};
