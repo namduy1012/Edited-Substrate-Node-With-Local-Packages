@@ -5,23 +5,22 @@ pub use pallet::*;
 #[frame_support::pallet]
 pub mod pallet {
 
-    use frame_support::{pallet_prelude::*,
-		traits::{Randomness},
-		sp_runtime::traits::Hash,
-		inherent::Vec};
+	use frame_support::{
+		inherent::Vec, pallet_prelude::*, sp_runtime::traits::Hash, traits::Randomness,
+	};
 	use frame_system::pallet_prelude::*;
-	 #[cfg(feature = "std")]
-    use serde::{Deserialize, Serialize};
+	#[cfg(feature = "std")]
+	use serde::{Deserialize, Serialize};
 
-    #[pallet::pallet]
-    #[pallet::generate_store(pub(super) trait Store)]
-    pub struct Pallet<T>(_);
+	#[pallet::pallet]
+	#[pallet::generate_store(pub(super) trait Store)]
+	pub struct Pallet<T>(_);
 
-    #[pallet::config]
-    pub trait Config: frame_system::Config {
+	#[pallet::config]
+	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 		type HealthRandomness: Randomness<Self::Hash, Self::BlockNumber>;
-    }
+	}
 
 	pub type VecString = Vec<u8>;
 	pub type BigNumberType = u64;
@@ -38,7 +37,12 @@ pub mod pallet {
 	#[derive(Clone, Encode, Decode, PartialEq, Copy, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 	pub enum RateScale {
-		Zero, One, Two, Three, Four, Five,
+		Zero,
+		One,
+		Two,
+		Three,
+		Four,
+		Five,
 	}
 
 	#[derive(Clone, Encode, Decode, PartialEq, Copy, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -46,14 +50,7 @@ pub mod pallet {
 	pub enum MaritalStatus {
 		Single,
 		Married,
-		Divorced
-	}
-
-	#[derive(Clone, Encode, Decode, PartialEq, Copy, RuntimeDebug, TypeInfo, MaxEncodedLen)]
-	#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
-	pub enum Attrition {
-		Yes,
-		No,
+		Divorced,
 	}
 
 	#[derive(Clone, Encode, Decode, PartialEq, Copy, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -88,7 +85,7 @@ pub mod pallet {
 		Nurse,
 		Administrative,
 		Therapist,
-		Other
+		Other,
 	}
 
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -96,12 +93,12 @@ pub mod pallet {
 	pub struct AccountInfo<T: Config> {
 		pub owner: T::AccountId,
 		pub employeeid: [SmallNumberType; 7],
-		pub hashid : T::Hash,
+		pub hashid: T::Hash,
 	}
 
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	pub struct IndividualInfo {
-		pub age : SmallNumberType,
+		pub age: SmallNumberType,
 		pub gender: Gender,
 		pub education: RateScale,
 		pub education_field: FieldName,
@@ -139,8 +136,8 @@ pub mod pallet {
 
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	pub struct RatingInfo {
-		pub attrition: Attrition,
-		pub environment_satisfaction:RateScale,
+		pub attrition: Bool,
+		pub environment_satisfaction: RateScale,
 		pub job_satisfaction: RateScale,
 		pub performance_rating: RateScale,
 		pub relationship_satisfaction: RateScale,
@@ -150,7 +147,7 @@ pub mod pallet {
 
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	#[scale_info(skip_type_params(T))]
-	pub struct PatientInfo<T: Config> {
+	pub struct HealthWorkerInfo<T: Config> {
 		pub account: AccountInfo<T>,
 		pub individual_info: IndividualInfo,
 		pub working_info: WorkingInfo,
@@ -158,93 +155,96 @@ pub mod pallet {
 		pub rating: RatingInfo,
 	}
 
-
 	#[pallet::storage]
 	#[pallet::getter(fn employee_count)]
 	pub(super) type EmployeeCount<T> = StorageValue<_, u32, ValueQuery>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn account_info_storage)]
-	pub(super) type AccountInfoStorage<T: Config> = StorageMap<
-		_, 
-		Blake2_128Concat, T::AccountId,
-		AccountInfo<T>,
-	>;
+	pub(super) type AccountInfoStorage<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, AccountInfo<T>>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn individual_info_storage)]
 	pub(super) type IndividualInfoStorage<T: Config> = StorageDoubleMap<
-		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, AccountInfo<T>, 
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Blake2_128Concat,
+		AccountInfo<T>,
 		IndividualInfo,
 	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn working_info_storage)]
 	pub(super) type WorkingInfoStorage<T: Config> = StorageDoubleMap<
-		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, AccountInfo<T>, 
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Blake2_128Concat,
+		AccountInfo<T>,
 		WorkingInfo,
 	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn working_year_info_storage)]
 	pub(super) type WorkingYearStorage<T: Config> = StorageDoubleMap<
-		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, AccountInfo<T>, 
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Blake2_128Concat,
+		AccountInfo<T>,
 		WorkingYearInfo,
 	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn rating_info_storage)]
 	pub(super) type RatingInfoStorage<T: Config> = StorageDoubleMap<
-		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, AccountInfo<T>, 
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Blake2_128Concat,
+		AccountInfo<T>,
 		RatingInfo,
 	>;
 
 	#[pallet::storage]
-	#[pallet::getter(fn patient_info_storage)]
-	pub(super) type PatientInfoStorage<T: Config> = StorageDoubleMap<
-		_, 
-		Blake2_128Concat, T::AccountId, 
-		Blake2_128Concat, AccountInfo<T>, 
-		PatientInfo<T>,
+	#[pallet::getter(fn health_worker_info_storage)]
+	pub(super) type HealthWorkerInfoStorage<T: Config> = StorageDoubleMap<
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Blake2_128Concat,
+		AccountInfo<T>,
+		HealthWorkerInfo<T>,
 	>;
 
-
 	#[pallet::error]
-	pub enum Error<T> {
-		
-	}
+	pub enum Error<T> {}
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		AddAccountInfo(T::AccountId, T::Hash, T::BlockNumber),
 		AddIndividualInfo(T::AccountId, T::Hash, T::BlockNumber),
-		WorkingInfo(T::AccountId, T::Hash, T::BlockNumber),
-		WorkingYearInfo(T::AccountId, T::Hash, T::BlockNumber),
-		RatingInfo(T::AccountId, T::Hash, T::BlockNumber),
-		PatientInfo(T::AccountId, T::Hash, T::BlockNumber),
+		AddWorkingInfo(T::AccountId, T::Hash, T::BlockNumber),
+		AddWorkingYearInfo(T::AccountId, T::Hash, T::BlockNumber),
+		AddRatingInfo(T::AccountId, T::Hash, T::BlockNumber),
+		AddHealthWorkerInfo(T::AccountId, T::Hash, T::BlockNumber),
 	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(0)]
-		pub fn add_account_info(origin: OriginFor<T>, item: [SmallNumberType; 7]) -> DispatchResult {
+		pub fn add_account_info(
+			origin: OriginFor<T>,
+			item: [SmallNumberType; 7],
+		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let hash = Self::generate_hash(item);
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
-			let account_info = AccountInfo::<T>{
-				owner: sender.clone(),
-				employeeid: item,
-				hashid: hash.clone(),
-			};
+			let account_info =
+				AccountInfo::<T> { owner: sender.clone(), employeeid: item, hashid: hash.clone() };
 			<AccountInfoStorage<T>>::insert(sender.clone(), account_info);
 			Self::deposit_event(Event::AddAccountInfo(sender, hash, blocknumber));
 			Ok(())
@@ -254,8 +254,8 @@ pub mod pallet {
 		pub fn add_individual_info(origin: OriginFor<T>, item: IndividualInfo) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
-			let individual_info = IndividualInfo{
-				age : item.age,
+			let individual_info = IndividualInfo {
+				age: item.age,
 				gender: item.gender,
 				education: item.education,
 				education_field: item.education_field,
@@ -266,14 +266,13 @@ pub mod pallet {
 				no_companies_worked: item.distance_from_home,
 				monthly_income: item.monthly_income,
 				percent_salary_hike: item.percent_salary_hike,
-
 			};
 			let hash = Self::generate_hash(&individual_info);
 			let account_info = Self::account_info_storage(&sender);
 			<IndividualInfoStorage<T>>::insert(
 				sender.clone(),
 				account_info.unwrap(),
-				individual_info
+				individual_info,
 			);
 			Self::deposit_event(Event::AddIndividualInfo(sender, hash, blocknumber));
 			Ok(())
@@ -294,21 +293,19 @@ pub mod pallet {
 				overtime: item.overtime,
 				bussiness_travel: item.bussiness_travel,
 				training_times_lastyear: item.training_times_lastyear,
-				
 			};
 			let hash = Self::generate_hash(&working_info);
 			let account_info = Self::account_info_storage(&sender);
-			<WorkingInfoStorage<T>>::insert(
-				sender.clone(),
-				account_info.unwrap(),
-				working_info
-			);
-			Self::deposit_event(Event::WorkingInfo(sender, hash, blocknumber));
+			<WorkingInfoStorage<T>>::insert(sender.clone(), account_info.unwrap(), working_info);
+			Self::deposit_event(Event::AddWorkingInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 
 		#[pallet::weight(0)]
-		pub fn add_working_year_info(origin: OriginFor<T>, item: WorkingYearInfo) -> DispatchResult {
+		pub fn add_working_year_info(
+			origin: OriginFor<T>,
+			item: WorkingYearInfo,
+		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let working_year_info = WorkingYearInfo {
@@ -317,16 +314,15 @@ pub mod pallet {
 				year_incurrent_role: item.year_incurrent_role,
 				year_inlast_promotion: item.year_inlast_promotion,
 				year_withcurrent_manager: item.year_withcurrent_manager,
-				
 			};
 			let hash = Self::generate_hash(&working_year_info);
 			let account_info = Self::account_info_storage(&sender);
 			<WorkingYearStorage<T>>::insert(
 				sender.clone(),
 				account_info.unwrap(),
-				working_year_info
+				working_year_info,
 			);
-			Self::deposit_event(Event::WorkingYearInfo(sender, hash, blocknumber));
+			Self::deposit_event(Event::AddWorkingYearInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 
@@ -336,31 +332,26 @@ pub mod pallet {
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let rating_info = RatingInfo {
 				attrition: item.attrition,
-				environment_satisfaction:item.environment_satisfaction,
+				environment_satisfaction: item.environment_satisfaction,
 				job_satisfaction: item.job_satisfaction,
 				performance_rating: item.performance_rating,
 				relationship_satisfaction: item.relationship_satisfaction,
 				shift: item.shift,
 				work_life_balance: item.work_life_balance,
-				
 			};
 			let hash = Self::generate_hash(&rating_info);
 			let account_info = Self::account_info_storage(&sender);
-			<RatingInfoStorage<T>>::insert(
-				sender.clone(),
-				account_info.unwrap(),
-				rating_info,
-			);
-			Self::deposit_event(Event::RatingInfo(sender, hash, blocknumber));
+			<RatingInfoStorage<T>>::insert(sender.clone(), account_info.unwrap(), rating_info);
+			Self::deposit_event(Event::AddRatingInfo(sender, hash, blocknumber));
 			Ok(())
 		}
 
 		#[pallet::weight(0)]
-		pub fn add_patient_info(origin: OriginFor<T>) -> DispatchResult {
+		pub fn add_health_worker_info(origin: OriginFor<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let account_info = Self::account_info_storage(&sender).unwrap();
-			let patient_info = PatientInfo::<T> {
+			let patient_info = HealthWorkerInfo::<T> {
 				account: account_info.clone(),
 				individual_info: Self::individual_info_storage(&sender, &account_info).unwrap(),
 				working_info: Self::working_info_storage(&sender, &account_info).unwrap(),
@@ -368,17 +359,16 @@ pub mod pallet {
 				rating: Self::rating_info_storage(&sender, &account_info).unwrap(),
 			};
 			let hash = Self::generate_hash(&patient_info);
-			<PatientInfoStorage<T>>::insert(sender.clone(), account_info, patient_info);
-			Self::deposit_event(Event::PatientInfo(sender, hash, blocknumber));
+			<HealthWorkerInfoStorage<T>>::insert(sender.clone(), account_info, patient_info);
+			Self::deposit_event(Event::AddHealthWorkerInfo(sender, hash, blocknumber));
 			Ok(())
 		}
-
 	}
 
 	impl<T: Config> Pallet<T> {
-		fn generate_hash<V> (item: V) -> T::Hash 
+		fn generate_hash<V>(item: V) -> T::Hash
 		where
-        V: Encode, 
+			V: Encode,
 		{
 			let tmp = (
 				T::HealthRandomness::random(&b"2023/02/16_PhD_Nguyen_Quoc_Duy_Nam"[..]).0,
@@ -389,6 +379,4 @@ pub mod pallet {
 			hash
 		}
 	}
-
-	
 }
