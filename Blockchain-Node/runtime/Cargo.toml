@@ -25,6 +25,7 @@ pallet-sudo = { default-features = false, path = "../../Packages/frame/sudo" }
 frame-system = { default-features = false, path = "../../Packages/frame/system" }
 frame-try-runtime = { default-features = false, path = "../../Packages/frame/try-runtime", optional = true}
 pallet-timestamp = { default-features = false, path = "../../Packages/frame/timestamp" }
+pallet-utility = { default-features = false, path = "../../Packages/frame/utility" }
 pallet-transaction-payment = { default-features = false, path = "../../Packages/frame/transaction-payment" }
 frame-executive = { default-features = false, path = "../../Packages/frame/executive" }
 sp-api = { default-features = false, path = "../../Packages/primitives/api" }
@@ -59,6 +60,7 @@ substrate-wasm-builder = { default-features = false, path = "../../Packages/util
 [features]
 default = ["std"]
 std = [
+	"pallet-timestamp/std",
 	"frame-try-runtime?/std",
 	"frame-system-benchmarking?/std",
 	"frame-benchmarking?/std",

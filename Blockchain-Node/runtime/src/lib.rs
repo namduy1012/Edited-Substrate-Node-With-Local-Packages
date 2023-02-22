@@ -53,6 +53,8 @@ pub use collectibles;
 pub use kitties;
 pub use ea4healthcare;
 
+pub use pallet_utility;
+
 /// An index to a block.
 pub type BlockNumber = u32;
 
@@ -298,6 +300,12 @@ impl ea4healthcare::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
     type HealthRandomness = RandomnessCollectiveFlip;
 }
+impl pallet_utility::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+    type RuntimeCall = RuntimeCall;
+	type WeightInfo = ();
+	type PalletsOrigin = OriginCaller;
+}
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
@@ -320,6 +328,7 @@ construct_runtime!(
 		Collectibles: collectibles,
 		Kitties: kitties,
 		EA4Healthcare: ea4healthcare,
+		Utility: pallet_utility,
 	}
 );
 
