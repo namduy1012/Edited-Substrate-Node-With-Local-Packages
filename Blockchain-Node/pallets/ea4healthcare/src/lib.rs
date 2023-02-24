@@ -359,7 +359,9 @@ pub mod pallet {
 				rating: Self::rating_info_storage(&sender, &account_info).unwrap(),
 			};
 			let hash = Self::generate_hash(&patient_info);
+			let new_cnt = Self::employee_count().checked_add(1).unwrap();
 			<HealthWorkerInfoStorage<T>>::insert(sender.clone(), account_info, patient_info);
+			<EmployeeCount<T>>::put(new_cnt);
 			Self::deposit_event(Event::AddHealthWorkerInfo(sender, hash, blocknumber));
 			Ok(())
 		}
