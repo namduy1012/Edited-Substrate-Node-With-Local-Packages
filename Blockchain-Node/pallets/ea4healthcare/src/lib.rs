@@ -76,6 +76,7 @@ pub mod pallet {
 		TechnicalDegree,
 		Marketing,
 		LifeSciences,
+		HumanResources,
 		Other,
 	}
 
