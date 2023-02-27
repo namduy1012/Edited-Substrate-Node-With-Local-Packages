@@ -13,7 +13,7 @@ pub mod pallet {
 		inherent::Vec, 
 		pallet_prelude::*, 
 		sp_runtime::traits::Hash, 
-		traits::Randomness,
+		traits::Randomness
 	};
 	use frame_system::pallet_prelude::*;
 	#[cfg(feature = "std")]
@@ -231,7 +231,9 @@ pub mod pallet {
 	>;
 
 	#[pallet::error]
-	pub enum Error<T> {}
+	pub enum Error<T> {
+		SeedWeightTooHigh
+	}
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -246,12 +248,15 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		#[pallet::weight(T::WeightInfo::add_info())]
+
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
 		pub fn add_account_info(
 			origin: OriginFor<T>,
 			item: [SmallNumberType; 7],
+			seed: u32
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let hash = Self::generate_hash(item);
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let account_info =
@@ -261,9 +266,10 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(T::WeightInfo::add_info())]
-		pub fn add_individual_info(origin: OriginFor<T>, item: IndividualInfo) -> DispatchResult {
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
+		pub fn add_individual_info(origin: OriginFor<T>, item: IndividualInfo, seed: u32) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let individual_info = IndividualInfo {
 				age: item.age,
@@ -289,9 +295,10 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(T::WeightInfo::add_info())]
-		pub fn add_working_info(origin: OriginFor<T>, item: WorkingInfo) -> DispatchResult {
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
+		pub fn add_working_info(origin: OriginFor<T>, item: WorkingInfo, seed: u32) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let working_info = WorkingInfo {
 				job_involvement: item.job_involvement,
@@ -312,12 +319,14 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(T::WeightInfo::add_info())]
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
 		pub fn add_working_year_info(
 			origin: OriginFor<T>,
 			item: WorkingYearInfo,
+			seed: u32
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let working_year_info = WorkingYearInfo {
 				total_working_years: item.total_working_years,
@@ -337,9 +346,10 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(T::WeightInfo::add_info())]
-		pub fn add_rating_info(origin: OriginFor<T>, item: RatingInfo) -> DispatchResult {
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
+		pub fn add_rating_info(origin: OriginFor<T>, item: RatingInfo, seed: u32) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let rating_info = RatingInfo {
 				attrition: item.attrition,
@@ -357,9 +367,10 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(T::WeightInfo::add_info())]
-		pub fn add_health_worker_info(origin: OriginFor<T>) -> DispatchResult {
+		#[pallet::weight(T::WeightInfo::add_info(*seed))]
+		pub fn add_health_worker_info(origin: OriginFor<T>, seed: u32) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
+			ensure!( seed <= 10000 as u32, Error::<T>::SeedWeightTooHigh); 
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
 			let account_info = Self::account_info_storage(&sender).unwrap();
 			let patient_info = HealthWorkerInfo::<T> {
