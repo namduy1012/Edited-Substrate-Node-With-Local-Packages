@@ -2,11 +2,18 @@
 
 pub use pallet::*;
 
+pub mod weights;
+
+pub use weights::WeightInfo;
+
 #[frame_support::pallet]
 pub mod pallet {
-
+	use super::*;
 	use frame_support::{
-		inherent::Vec, pallet_prelude::*, sp_runtime::traits::Hash, traits::Randomness,
+		inherent::Vec, 
+		pallet_prelude::*, 
+		sp_runtime::traits::Hash, 
+		traits::Randomness,
 	};
 	use frame_system::pallet_prelude::*;
 	#[cfg(feature = "std")]
@@ -19,7 +26,10 @@ pub mod pallet {
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
+		
 		type HealthRandomness: Randomness<Self::Hash, Self::BlockNumber>;
+
+		type WeightInfo: WeightInfo;
 	}
 
 	pub type VecString = Vec<u8>;
@@ -236,7 +246,7 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_account_info(
 			origin: OriginFor<T>,
 			item: [SmallNumberType; 7],
@@ -251,7 +261,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_individual_info(origin: OriginFor<T>, item: IndividualInfo) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
@@ -279,7 +289,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_working_info(origin: OriginFor<T>, item: WorkingInfo) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
@@ -302,7 +312,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_working_year_info(
 			origin: OriginFor<T>,
 			item: WorkingYearInfo,
@@ -327,7 +337,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_rating_info(origin: OriginFor<T>, item: RatingInfo) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();
@@ -347,7 +357,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pallet::weight(T::WeightInfo::add_info())]
 		pub fn add_health_worker_info(origin: OriginFor<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let blocknumber = <frame_system::Pallet<T>>::block_number();

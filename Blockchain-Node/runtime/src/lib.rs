@@ -299,6 +299,7 @@ impl kitties::Config for Runtime {
 impl ea4healthcare::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
     type HealthRandomness = RandomnessCollectiveFlip;
+	type WeightInfo = ();
 }
 impl pallet_utility::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
