@@ -1,8 +1,10 @@
 {
-  "name": "Nam Testnet",
+  "name": "Nam-Network",
   "id": "OMU",
   "chainType": "Local",
-  "bootNodes": [],
+  "bootNodes": [
+    "/ip4/10.241.19.7/tcp/30333/p2p/12D3KooWKKkj6poJQpYTptMNBHmWX4EEc7whyKt2C7fvdjWtzyQy"
+  ],
   "telemetryEndpoints": null,
   "protocolId": null,
   "properties": null,
@@ -44,27 +46,27 @@
         "balances": [
           [
             "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            36028797018963968
+            1152921504606847000
           ],
           [
             "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
-            36028797018963968
+            1152921504606847000
           ],
           [
             "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-            36028797018963968
+            1152921504606847000
           ],
           [
             "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
-            36028797018963968
+            1152921504606847000
           ],
           [
             "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
-            36028797018963968
+            1152921504606847000
           ],
           [
             "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL",
-            36028797018963968
+            1152921504606847000
           ]
         ]
       },
