@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "node",
+    "node/Original-Node",
     "pallets/template",
     "pallets/collectibles",
     "pallets/kitties",
