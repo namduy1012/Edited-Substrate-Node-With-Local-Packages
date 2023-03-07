@@ -58,7 +58,7 @@ frame-benchmarking = { path = "../../../Packages/frame/benchmarking" }
 frame-benchmarking-cli = { path = "../../../Packages/utils/frame/benchmarking-cli"}
 
 # Local Dependencies
-node-template-runtime = { version = "4.0.0-dev", path = "../../runtime" }
+node-template-runtime = { version = "4.0.0-dev", path = "../../runtime/Original-Runtime" }
 
 # CLI-specific dependencies
 try-runtime-cli = { path = "../../../Packages/utils/frame/try-runtime/cli",optional = true}

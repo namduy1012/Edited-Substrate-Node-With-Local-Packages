@@ -5,7 +5,7 @@ members = [
     "pallets/collectibles",
     "pallets/kitties",
     "pallets/ea4healthcare",
-    "runtime",
+    "runtime/Original-Runtime",
 ]
 [profile.release]
 panic = "unwind"
