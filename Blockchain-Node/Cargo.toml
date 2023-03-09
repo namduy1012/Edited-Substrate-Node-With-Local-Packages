@@ -1,8 +1,8 @@
 [workspace]
 members = [
-    "node/Original-Node",
+    "node/original",
     "pallets/ea4healthcare",
-    "runtime",
+    "runtime/original",
 ]
 [profile.release]
 panic = "unwind"
