@@ -816,16 +816,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "collectibles"
-version = "0.1.0"
-dependencies = [
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "scale-info",
-]
-
-[[package]]
 name = "comfy-table"
 version = "6.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2778,21 +2768,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "kitties"
-version = "0.1.0"
-dependencies = [
- "frame-support",
- "frame-system",
- "log",
- "parity-scale-codec",
- "scale-info",
- "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "kv-log-macro"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3758,88 +3733,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "node-template"
-version = "4.0.0-dev"
-dependencies = [
- "clap",
- "frame-benchmarking",
- "frame-benchmarking-cli",
- "frame-system",
- "jsonrpsee",
- "node-template-runtime",
- "pallet-transaction-payment",
- "pallet-transaction-payment-rpc",
- "sc-basic-authorship",
- "sc-cli",
- "sc-client-api",
- "sc-consensus",
- "sc-consensus-aura",
- "sc-executor",
- "sc-finality-grandpa",
- "sc-keystore",
- "sc-rpc",
- "sc-rpc-api",
- "sc-service",
- "sc-telemetry",
- "sc-transaction-pool",
- "sc-transaction-pool-api",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-aura",
- "sp-core",
- "sp-finality-grandpa",
- "sp-inherents",
- "sp-keyring",
- "sp-runtime",
- "sp-timestamp",
- "substrate-build-script-utils",
- "substrate-frame-rpc-system",
- "try-runtime-cli",
-]
-
-[[package]]
-name = "node-template-runtime"
-version = "4.0.0-dev"
-dependencies = [
- "collectibles",
- "ea4healthcare",
- "frame-benchmarking",
- "frame-executive",
- "frame-support",
- "frame-system",
- "frame-system-benchmarking",
- "frame-system-rpc-runtime-api",
- "frame-try-runtime",
- "kitties",
- "pallet-aura",
- "pallet-balances",
- "pallet-grandpa",
- "pallet-randomness-collective-flip",
- "pallet-sudo",
- "pallet-template",
- "pallet-timestamp",
- "pallet-transaction-payment",
- "pallet-transaction-payment-rpc-runtime-api",
- "pallet-utility",
- "parity-scale-codec",
- "scale-info",
- "sp-api",
- "sp-block-builder",
- "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
- "substrate-wasm-builder",
-]
-
-[[package]]
 name = "nodrop"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3985,6 +3878,85 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
 
 [[package]]
+name = "original"
+version = "4.0.0-dev"
+dependencies = [
+ "clap",
+ "frame-benchmarking",
+ "frame-benchmarking-cli",
+ "frame-system",
+ "jsonrpsee",
+ "original-runtime",
+ "pallet-transaction-payment",
+ "pallet-transaction-payment-rpc",
+ "sc-basic-authorship",
+ "sc-cli",
+ "sc-client-api",
+ "sc-consensus",
+ "sc-consensus-aura",
+ "sc-executor",
+ "sc-finality-grandpa",
+ "sc-keystore",
+ "sc-rpc",
+ "sc-rpc-api",
+ "sc-service",
+ "sc-telemetry",
+ "sc-transaction-pool",
+ "sc-transaction-pool-api",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-timestamp",
+ "substrate-build-script-utils",
+ "substrate-frame-rpc-system",
+ "try-runtime-cli",
+]
+
+[[package]]
+name = "original-runtime"
+version = "4.0.0-dev"
+dependencies = [
+ "ea4healthcare",
+ "frame-benchmarking",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "frame-system-benchmarking",
+ "frame-system-rpc-runtime-api",
+ "frame-try-runtime",
+ "pallet-aura",
+ "pallet-balances",
+ "pallet-grandpa",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "pallet-transaction-payment-rpc-runtime-api",
+ "pallet-utility",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api",
+ "sp-block-builder",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-inherents",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
+ "substrate-wasm-builder",
+]
+
+[[package]]
 name = "os_str_bytes"
 version = "6.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4109,20 +4081,6 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std",
-]
-
-[[package]]
-name = "pallet-template"
-version = "4.0.0-dev"
-dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
 ]
 
 [[package]]

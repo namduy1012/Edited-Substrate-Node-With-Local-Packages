@@ -1,5 +1,5 @@
 [package]
-name = "node-template"
+name = "original"
 version = "4.0.0-dev"
 description = "A fresh FRAME-based Substrate node, ready for hacking."
 authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
@@ -7,14 +7,14 @@ homepage = "https://substrate.io/"
 edition = "2021"
 license = "Unlicense"
 publish = false
-repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+repository = "https://github.com/substrate-developer-hub/substrate-original/"
 build = "build.rs"
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
-name = "node-template"
+name = "original"
 
 [dependencies]
 clap = { version = "4.0.9", features = ["derive"] }
@@ -58,7 +58,7 @@ frame-benchmarking = { path = "../../../Packages/frame/benchmarking" }
 frame-benchmarking-cli = { path = "../../../Packages/utils/frame/benchmarking-cli"}
 
 # Local Dependencies
-node-template-runtime = { version = "4.0.0-dev", path = "../../runtime" }
+original-runtime = { version = "4.0.0-dev", path = "../../runtime" }
 
 # CLI-specific dependencies
 try-runtime-cli = { path = "../../../Packages/utils/frame/try-runtime/cli",optional = true}
@@ -70,10 +70,10 @@ substrate-build-script-utils = { path = "../../../Packages/utils/build-script-ut
 default = []
 # Dependencies that are only required if runtime benchmarking should be build.
 runtime-benchmarks = [
-	"node-template-runtime/runtime-benchmarks",
+	"original-runtime/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
 	"frame-benchmarking-cli/runtime-benchmarks",
 ]
 # Enable features that allow the runtime to be tried and debugged. Name might be subject to change
 # in the near future.
-try-runtime = ["node-template-runtime/try-runtime", "try-runtime-cli"]
+try-runtime = ["original-runtime/try-runtime", "try-runtime-cli"]

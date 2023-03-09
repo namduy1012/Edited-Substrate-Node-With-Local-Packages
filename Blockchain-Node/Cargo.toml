@@ -1,9 +1,6 @@
 [workspace]
 members = [
     "node/Original-Node",
-    "pallets/template",
-    "pallets/collectibles",
-    "pallets/kitties",
     "pallets/ea4healthcare",
     "runtime",
 ]
